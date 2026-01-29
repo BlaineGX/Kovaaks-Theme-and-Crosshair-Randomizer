@@ -1,13 +1,73 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+// These imports are added to Main because we'll need them for file and path handling
+// when accessing Kovaaks folders or assets directly from the main logic. 
+// They let us use Files.read, Files.list, Paths.get, etc. in main without cluttering
+// later code with fully qualified names and make expanding main's functionality (such
+// as reading theme/crosshair files) easier and clearer. (-Cursor, Written notes.)
+
+
+
 public class Main {
 
-public static void main(String[] args) {
-    /*
-    1. KOVAAKS_ROOT = <your path>
-    2. THEMES_PATH = KOVAAKS_ROOT + "\\FPSAimTrainer\\Saved\\SaveGames\\Themes" (or whatever you actually see)
-    3. CROSSHAIRS_PATH = ...
-    4. Rule: “Theme name = …”, “Crosshair name = …”, “Crosshair image = …”
-    */
+private static Path findKovaaksRoot() {
+    // We will scan common Steam paths on drives C: to Z:
+    for (char drive = 'C'; drive <= 'Z'; drive++) {
+        Path candidate1 = Paths.get(
+                drive + ":\\",
+                "Program Files (x86)",
+                "Steam",
+                "steamapps",
+                "common",
+                "FPSAimTrainer",
+                "FPSAimTrainer"
+        );
 
+        Path candidate2 = Paths.get(
+                drive + ":\\",
+                "Program Files",
+                "Steam",
+                "steamapps",
+                "common",
+                "FPSAimTrainer",
+                "FPSAimTrainer"
+        );
+
+        Path candidate3 = Paths.get(
+                drive + ":\\",
+                "Steam",
+                "steamapps",
+                "common",
+                "FPSAimTrainer",
+                "FPSAimTrainer"
+        );
+
+        Path candidate4 = Paths.get(
+                drive + ":\\",
+                "SteamLibrary",
+                "steamapps",
+                "common",
+                "FPSAimTrainer",
+                "FPSAimTrainer"
+        );
+
+        // Check each candidate. Files.isDirectory(...) means:
+        // “does this path exist AND is it a folder?”
+        if (Files.isDirectory(candidate1)) return candidate1;
+        if (Files.isDirectory(candidate2)) return candidate2;
+        if (Files.isDirectory(candidate3)) return candidate3;
+        if (Files.isDirectory(candidate4)) return candidate4;
+    }
+
+    // If we checked everything and found nothing:
+    return null;
+}
+
+
+
+public static void main(String[] args) {
     // Deliverable:
     //  Kovaaks, is a name of a Aim Training Software that is used by many pros 
     // and semi-professionals to train their aim to get the mechanical advantage.
@@ -22,7 +82,7 @@ public static void main(String[] args) {
     // and different crosshair to change the way they hold their angles, flick, track, etc, to let them adapt to multiple 
     // different styles and techniques with the crosshair and eye training with seeing enemies and backgrounds in different colors.
 
-    
+    System.out.println("Saved kovaaks path: " + Config.getKovaaksPath());
 
 
 

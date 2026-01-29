@@ -16,7 +16,9 @@ public class Config {
 
     }
 
-    // Reads the saved Kovaaks root path from the config file.
+    // Reads the saved Kovaaks root path from the config file. 
+    // If the file exist, it will return the path. 
+    // If the file does not exist, it will return null.
     public static String getKovaaksPath() {
         Path configDir = getConfigDir();
         Path pathFile = configDir.resolve(KOVAAKS_PATH_FILE);
